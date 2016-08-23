@@ -8,9 +8,9 @@ use yii\data\ActiveDataProvider;
 use app\models\OrderDetail;
 
 /**
- * OrderDetailSearch represents the model behind the search form about `app\models\OrderDetail`.
+ * app\models\OrderDetailSearch represents the model behind the search form about `app\models\OrderDetail`.
  */
-class OrderDetailSearch extends OrderDetail
+ class OrderDetailSearch extends OrderDetail
 {
     /**
      * @inheritdoc
@@ -43,8 +43,6 @@ class OrderDetailSearch extends OrderDetail
     {
         $query = OrderDetail::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class OrderDetailSearch extends OrderDetail
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'order_id' => $this->order_id,

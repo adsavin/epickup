@@ -8,9 +8,9 @@ use yii\data\ActiveDataProvider;
 use app\models\Shop;
 
 /**
- * ShopSearch represents the model behind the search form about `app\models\Shop`.
+ * app\models\ShopSearch represents the model behind the search form about `app\models\Shop`.
  */
-class ShopSearch extends Shop
+ class ShopSearch extends Shop
 {
     /**
      * @inheritdoc
@@ -43,8 +43,6 @@ class ShopSearch extends Shop
     {
         $query = Shop::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class ShopSearch extends Shop
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'created_date' => $this->created_date,

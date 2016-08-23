@@ -2,58 +2,25 @@
 
 namespace app\models;
 
-use Yii;
+use \app\models\base\Unit as BaseUnit;
 
 /**
  * This is the model class for table "unit".
- *
- * @property integer $id
- * @property string $code
- * @property string $name
- *
- * @property Product[] $products
  */
-class Unit extends \yii\db\ActiveRecord
+class Unit extends BaseUnit
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'unit';
-    }
-
     /**
      * @inheritdoc
      */
     public function rules()
     {
-        return [
-            [['id', 'code', 'name'], 'required'],
-            [['id'], 'integer'],
+        return array_replace_recursive(parent::rules(),
+	    [
+            [['code', 'name'], 'required'],
             [['code'], 'string', 'max' => 45],
             [['name'], 'string', 'max' => 255],
-            [['code'], 'unique'],
-        ];
+            [['code'], 'unique']
+        ]);
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('app', 'ID'),
-            'code' => Yii::t('app', 'Code'),
-            'name' => Yii::t('app', 'Name'),
-        ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProducts()
-    {
-        return $this->hasMany(Product::className(), ['unit_id' => 'id']);
-    }
+	
 }

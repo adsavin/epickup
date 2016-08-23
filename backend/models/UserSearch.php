@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\User;
+use app\models\User;
 
 /**
- * UserSearch represents the model behind the search form about `common\models\User`.
+ * app\models\UserSearch represents the model behind the search form about `app\models\User`.
  */
-class UserSearch extends User
+ class UserSearch extends User
 {
     /**
      * @inheritdoc
@@ -43,8 +43,6 @@ class UserSearch extends User
     {
         $query = User::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class UserSearch extends User
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,

@@ -8,9 +8,9 @@ use yii\data\ActiveDataProvider;
 use app\models\Product;
 
 /**
- * ProductSearch represents the model behind the search form about `app\models\Product`.
+ * app\models\ProductSearch represents the model behind the search form about `app\models\Product`.
  */
-class ProductSearch extends Product
+ class ProductSearch extends Product
 {
     /**
      * @inheritdoc
@@ -43,8 +43,6 @@ class ProductSearch extends Product
     {
         $query = Product::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class ProductSearch extends Product
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'unit_id' => $this->unit_id,

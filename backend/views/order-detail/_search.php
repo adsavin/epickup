@@ -8,24 +8,36 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="order-detail-search">
+<div class="form-order-detail-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?= $form->field($model, 'id', ['template' => '{input}'])->textInput(['style' => 'display:none']); ?>
 
-    <?= $form->field($model, 'order_id') ?>
+    <?= $form->field($model, 'order_id')->widget(\kartik\widgets\Select2::classname(), [
+        'data' => \yii\helpers\ArrayHelper::map(\app\models\Order::find()->orderBy('id')->asArray()->all(), 'id', 'id'),
+        'options' => ['placeholder' => Yii::t('app', 'Choose Order')],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]); ?>
 
-    <?= $form->field($model, 'shop_branch_id') ?>
+    <?= $form->field($model, 'shop_branch_id')->widget(\kartik\widgets\Select2::classname(), [
+        'data' => \yii\helpers\ArrayHelper::map(\app\models\ShopBranchHasProduct::find()->orderBy('shop_branch_id')->asArray()->all(), 'shop_branch_id', 'shop_branch_id'),
+        'options' => ['placeholder' => Yii::t('app', 'Choose Shop branch has product')],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]); ?>
 
-    <?= $form->field($model, 'product_id') ?>
+    <?= $form->field($model, 'product_id')->textInput(['placeholder' => 'Product']) ?>
 
-    <?= $form->field($model, 'amount') ?>
+    <?= $form->field($model, 'amount')->textInput(['maxlength' => true, 'placeholder' => 'Amount']) ?>
 
-    <?php // echo $form->field($model, 'total') ?>
+    <?php /* echo $form->field($model, 'total')->textInput(['maxlength' => true, 'placeholder' => 'Total']) */ ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

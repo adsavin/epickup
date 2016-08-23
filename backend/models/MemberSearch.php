@@ -8,9 +8,9 @@ use yii\data\ActiveDataProvider;
 use app\models\Member;
 
 /**
- * MemberSearch represents the model behind the search form about `app\models\Member`.
+ * app\models\MemberSearch represents the model behind the search form about `app\models\Member`.
  */
-class MemberSearch extends Member
+ class MemberSearch extends Member
 {
     /**
      * @inheritdoc
@@ -44,8 +44,6 @@ class MemberSearch extends Member
     {
         $query = Member::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -58,7 +56,6 @@ class MemberSearch extends Member
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'birthdate' => $this->birthdate,

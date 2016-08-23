@@ -1,59 +1,105 @@
 <?php
-
-use yii\helpers\Html;
-use yii\grid\GridView;
-use yii\widgets\Pjax;
-use common\models\User;
-
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+use yii\helpers\Html;
+use kartik\export\ExportMenu;
+use kartik\grid\GridView;
+use common\models\User;
+
 $this->title = Yii::t('app', 'Users');
 $this->params['breadcrumbs'][] = $this->title;
+$search = "$('.search-button').click(function(){
+	$('.search-form').toggle(1000);
+	return false;
+});";
+$this->registerJs($search);
 ?>
 <div class="user-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]);  ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]);   ?>
 
     <p>
         <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Advance Search'), '#', ['class' => 'btn btn-info search-button']) ?>
     </p>
-    <?php Pjax::begin(); ?>    <?=
-    GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-//            'id',
-            'username',
-//            'auth_key',
-//            'password_hash',
-//            'password_reset_token',
-            'email:email',
-            [
-                'attribute' => 'status',
-                'format' => 'html',
-                'filter' => [User::STATUS_ACTIVE => "Active", User::STATUS_DELETED => "Delete"],
-                'value' => function($data) {
-            switch ($data->status) {
-                case User::STATUS_ACTIVE:
-                    return "<span class='label label-success'><i class='fa fa-check'></i> Active</span>";
-                case User::STATUS_DELETED:
-                    return "<span class='label label-danger'><i class='fa fa-trash'></i> Delete</span>";
-            }
-        }
-            ],
-            [
-                'attribute' => 'created_at',
-                'value' => function($data) {
-                    return date("d/m/Y", $data->created_at);
-                }
-            ],
-            // 'updated_at',
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]);
-    ?>
-    <?php Pjax::end(); ?></div>
+    <div class="search-form" style="display:none">
+        <?= $this->render('_search', ['model' => $searchModel]); ?>
+    </div>
+    <?php
+    $gridColumn = [
+        ['class' => 'yii\grid\SerialColumn'],
+        [
+            'class' => 'kartik\grid\ExpandRowColumn',
+            'width' => '50px',
+            'value' => function ($model, $key, $index, $column) {
+                return GridView::ROW_COLLAPSED;
+            },
+            'detail' => function ($model, $key, $index, $column) {
+                return Yii::$app->controller->renderPartial('_expand', ['model' => $model]);
+            },
+                    'headerOptions' => ['class' => 'kartik-sheet-style'],
+                    'expandOneOnly' => true
+                ],
+                ['attribute' => 'id', 'visible' => false],
+                'username',
+//        'auth_key',
+//        'password_hash',
+//        'password_reset_token',
+                'email:email',
+                [
+                    'attribute' => 'status',
+                    'value' => function($data) {
+                        switch ($data->status) {
+                            case User::STATUS_ACTIVE:
+                                return Yii::t('app', 'Active');
+                            case User::STATUS_DELETED:
+                                return Yii::t('app', 'Deleted');
+                        }
+                    }
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{save-as-new} {view} {update} {delete}',
+                    'buttons' => [
+                        'save-as-new' => function ($url) {
+                            return Html::a('<span class="glyphicon glyphicon-copy"></span>', $url, ['title' => 'Save As New']);
+                        },
+                            ],
+                        ],
+                    ];
+                    ?>
+                    <?=
+                    GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
+                        'columns' => $gridColumn,
+                        'pjax' => true,
+                        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container-user']],
+                        'panel' => [
+                            'type' => GridView::TYPE_PRIMARY,
+                            'heading' => '<span class="glyphicon glyphicon-book"></span>  ' . Html::encode($this->title),
+                        ],
+                        // your toolbar can include the additional full export menu
+                        'toolbar' => [
+                            '{export}',
+                            ExportMenu::widget([
+                                'dataProvider' => $dataProvider,
+                                'columns' => $gridColumn,
+                                'target' => ExportMenu::TARGET_BLANK,
+                                'fontAwesome' => true,
+                                'dropdownOptions' => [
+                                    'label' => 'Full',
+                                    'class' => 'btn btn-default',
+                                    'itemsBefore' => [
+                                        '<li class="dropdown-header">Export All Data</li>',
+                                    ],
+                                ],
+                            ]),
+                        ],
+                    ]);
+                    ?>
+
+</div>

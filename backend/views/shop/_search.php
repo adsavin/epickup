@@ -8,22 +8,32 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="shop-search">
+<div class="form-shop-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?= $form->field($model, 'id', ['template' => '{input}'])->textInput(['style' => 'display:none']); ?>
 
-    <?= $form->field($model, 'code') ?>
+    <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'placeholder' => 'Code']) ?>
 
-    <?= $form->field($model, 'name') ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'placeholder' => 'Name']) ?>
 
-    <?= $form->field($model, 'logo') ?>
+    <?= $form->field($model, 'logo')->textInput(['maxlength' => true, 'placeholder' => 'Logo']) ?>
 
-    <?= $form->field($model, 'created_date') ?>
+    <?= $form->field($model, 'created_date')->widget(\kartik\datecontrol\DateControl::classname(), [
+        'type' => \kartik\datecontrol\DateControl::FORMAT_DATETIME,
+        'saveFormat' => 'php:Y-m-d H:i:s',
+        'ajaxConversion' => true,
+        'options' => [
+            'pluginOptions' => [
+                'placeholder' => Yii::t('app', 'Choose Created Date'),
+                'autoclose' => true,
+            ]
+        ],
+    ]); ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

@@ -8,9 +8,9 @@ use yii\data\ActiveDataProvider;
 use app\models\Unit;
 
 /**
- * UnitSearch represents the model behind the search form about `app\models\Unit`.
+ * app\models\UnitSearch represents the model behind the search form about `app\models\Unit`.
  */
-class UnitSearch extends Unit
+ class UnitSearch extends Unit
 {
     /**
      * @inheritdoc
@@ -43,8 +43,6 @@ class UnitSearch extends Unit
     {
         $query = Unit::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class UnitSearch extends Unit
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
         ]);
